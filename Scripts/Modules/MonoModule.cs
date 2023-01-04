@@ -5,7 +5,7 @@ namespace MonoOptimization
 {
     public abstract class MonoModule : MonoBehaviour
     {
-        public virtual IEnumerable<object> ProvideObjects()
+        public virtual IEnumerable<IMonoComponent> ProvideMonoComponents()
         {
             yield break;
         }
