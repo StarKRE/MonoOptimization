@@ -14,9 +14,9 @@ namespace MonoOptimization
             this.rootType = this.GetType();
         }
 
-        public override IEnumerable<object> ProvideObjects()
+        public override IEnumerable<IMonoComponent> ProvideMonoComponents()
         {
-            return Provider.ProvideObjects(this.rootType, this);
+            return Provider.ProvideComponents(this.rootType, this);
         }
 
         public override void Construct(MonoContextModular context)
@@ -32,20 +32,21 @@ namespace MonoOptimization
 
             private static readonly Type COMPONENT_ATTRIBUTE_TYPE = typeof(MonoComponentAttribute);
 
-            internal static List<object> ProvideObjects(Type moduleType, object moduleValue)
+            internal static List<IMonoComponent> ProvideComponents(Type moduleType, object moduleValue)
             {
-                var result = new List<object>();
+                var result = new List<IMonoComponent>();
 
                 while (moduleType != MODULE_TYPE)
                 {
-                    ProvideObjectsRecurcively(moduleType, moduleValue, result);
+                    ProvideComponentsRecurcively(moduleType, moduleValue, result);
                     moduleType = moduleType.BaseType;
                 }
 
                 return result;
             }
 
-            private static void ProvideObjectsRecurcively(Type objectType, object objectValue, List<object> resultList)
+            private static void ProvideComponentsRecurcively(Type objectType, object objectValue,
+                List<IMonoComponent> resultList)
             {
                 var fields = objectType.GetFields(BindingFlags.Instance |
                                                   BindingFlags.Public |
@@ -56,14 +57,14 @@ namespace MonoOptimization
                 {
                     var field = fields[i];
                     var fieldValue = field.GetValue(objectValue);
-                    if (field.IsDefined(COMPONENT_ATTRIBUTE_TYPE))
+                    if (field.IsDefined(COMPONENT_ATTRIBUTE_TYPE) && fieldValue is IMonoComponent component)
                     {
-                        resultList.Add(fieldValue);
+                        resultList.Add(component);
                     }
 
                     if (field.IsDefined(RESOLVE_ATTRIBUTE_TYPE))
                     {
-                        ProvideObjectsRecurcively(field.FieldType, fieldValue, resultList);
+                        ProvideComponentsRecurcively(field.FieldType, fieldValue, resultList);
                     }
                 }
             }
@@ -163,7 +164,7 @@ namespace MonoOptimization
                 {
                     return context.gameObject;
                 }
-                
+
                 if (parameterType == typeof(MonoBehaviour))
                 {
                     return context;

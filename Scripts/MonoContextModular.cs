@@ -12,7 +12,7 @@ namespace MonoOptimization
 
         protected override void Awake()
         {
-            this.RegisterObjects();
+            this.RegisterComponents();
             this.Construct();
             base.Awake();
         }
@@ -49,7 +49,7 @@ namespace MonoOptimization
             return false;
         }
 
-        private void RegisterObjects()
+        private void RegisterComponents()
         {
             var count = this.modules.Length;
             for (var i = 0; i < count; i++)
@@ -57,8 +57,8 @@ namespace MonoOptimization
                 var module = this.modules[i];
                 if (module != null)
                 {
-                    var registeredObjects = module.ProvideObjects();
-                    this.RegisterObjects(registeredObjects);
+                    var registeredObjects = module.ProvideMonoComponents();
+                    this.AddMonoComponents(registeredObjects);
                 }
             }
         }

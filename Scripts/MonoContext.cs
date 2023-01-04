@@ -6,170 +6,170 @@ namespace MonoOptimization
     [AddComponentMenu("MonoOptimization/MonoContext")]
     public class MonoContext : MonoBehaviour
     {
-        private readonly List<IAwakeListener> awakeListeners = new();
+        private readonly List<IAwakeComponent> awakeComponents = new();
 
-        private readonly List<IEnableListener> enableListeners = new();
+        private readonly List<IEnableComponent> enableComponents = new();
 
-        private readonly List<IStartListener> startListeners = new();
+        private readonly List<IStartComponent> startComponents = new();
 
-        private readonly List<IFixedUpdateListener> fixedUpdateListeners = new();
+        private readonly List<IFixedUpdateComponent> fixedUpdateComponents = new();
 
-        private readonly List<IUpdateListener> updateListeners = new();
+        private readonly List<IUpdateComponent> updateComponents = new();
 
-        private readonly List<ILateUpdateListener> lateUpdateListeners = new();
+        private readonly List<ILateUpdateComponent> lateUpdateComponents = new();
 
-        private readonly List<IDisableListener> disableListeners = new();
+        private readonly List<IDisableComponent> disableComponents = new();
 
-        private readonly List<IDestroyListener> destroyListeners = new();
+        private readonly List<IDestroyComponent> destroyComponents = new();
 
-        private readonly List<IValidateListener> validateListeners = new();
+        private readonly List<IValidateComponent> validateComponents = new();
 
-        public void RegisterObjects(params object[] values)
+        public void AddMonoComponents(params IMonoComponent[] components)
         {
-            for (int i = 0, count = values.Length; i < count; i++)
+            for (int i = 0, count = components.Length; i < count; i++)
             {
-                var value = values[i];
-                this.RegisterObject(value);
+                var component = components[i];
+                this.AddMonoComponent(component);
             }
         }
         
-        public void RegisterObjects(IEnumerable<object> values)
+        public void AddMonoComponents(IEnumerable<IMonoComponent> components)
         {
-            foreach (var value in values)
+            foreach (var component in components)
             {
-                this.RegisterObject(value);
+                this.AddMonoComponent(component);
             }
         }
         
-        public void RegisterObject(object value)
+        public void AddMonoComponent(IMonoComponent component)
         {
-            if (value is IAwakeListener awakeListener)
+            if (component is IAwakeComponent awakeComponent)
             {
-                this.awakeListeners.Add(awakeListener);
+                this.awakeComponents.Add(awakeComponent);
             }
 
-            if (value is IEnableListener enableListener)
+            if (component is IEnableComponent enableComponent)
             {
-                this.enableListeners.Add(enableListener);
+                this.enableComponents.Add(enableComponent);
             }
 
-            if (value is IStartListener startListener)
+            if (component is IStartComponent startComponent)
             {
-                this.startListeners.Add(startListener);
+                this.startComponents.Add(startComponent);
             }
 
-            if (value is IFixedUpdateListener fixedUpdateListener)
+            if (component is IFixedUpdateComponent fixedUpdateComponent)
             {
-                this.fixedUpdateListeners.Add(fixedUpdateListener);
+                this.fixedUpdateComponents.Add(fixedUpdateComponent);
             }
 
-            if (value is IUpdateListener updateListener)
+            if (component is IUpdateComponent updateComponent)
             {
-                this.updateListeners.Add(updateListener);
+                this.updateComponents.Add(updateComponent);
             }
 
-            if (value is ILateUpdateListener lateUpdateListener)
+            if (component is ILateUpdateComponent lateUpdateComponent)
             {
-                this.lateUpdateListeners.Add(lateUpdateListener);
+                this.lateUpdateComponents.Add(lateUpdateComponent);
             }
 
-            if (value is IDisableListener disableListener)
+            if (component is IDisableComponent disableComponent)
             {
-                this.disableListeners.Add(disableListener);
+                this.disableComponents.Add(disableComponent);
             }
         }
 
-        public void UnregisterObjects(IEnumerable<object> values)
+        public void UnregisterMonoComponents(IEnumerable<IMonoComponent> components)
         {
-            foreach (var value in values)
+            foreach (var component in components)
             {
-                this.UnregisterObject(value);
+                this.UnregisterMonoComponent(component);
             }
         }
 
-        public void UnregisterObject(object value)
+        public void UnregisterMonoComponent(IMonoComponent component)
         {
-            if (value is IAwakeListener awakeListener)
+            if (component is IAwakeComponent awakeComponent)
             {
-                this.awakeListeners.Remove(awakeListener);
+                this.awakeComponents.Remove(awakeComponent);
             }
 
-            if (value is IEnableListener enableListener)
+            if (component is IEnableComponent enableComponent)
             {
-                this.enableListeners.Remove(enableListener);
+                this.enableComponents.Remove(enableComponent);
             }
 
-            if (value is IStartListener startListener)
+            if (component is IStartComponent startComponent)
             {
-                this.startListeners.Remove(startListener);
+                this.startComponents.Remove(startComponent);
             }
 
-            if (value is IFixedUpdateListener fixedUpdateListener)
+            if (component is IFixedUpdateComponent fixedUpdateComponent)
             {
-                this.fixedUpdateListeners.Remove(fixedUpdateListener);
+                this.fixedUpdateComponents.Remove(fixedUpdateComponent);
             }
 
-            if (value is IUpdateListener updateListener)
+            if (component is IUpdateComponent updateComponent)
             {
-                this.updateListeners.Remove(updateListener);
+                this.updateComponents.Remove(updateComponent);
             }
 
-            if (value is ILateUpdateListener lateUpdateListener)
+            if (component is ILateUpdateComponent lateUpdateComponent)
             {
-                this.lateUpdateListeners.Remove(lateUpdateListener);
+                this.lateUpdateComponents.Remove(lateUpdateComponent);
             }
 
-            if (value is IDisableListener disableListener)
+            if (component is IDisableComponent disableComponent)
             {
-                this.disableListeners.Remove(disableListener);
+                this.disableComponents.Remove(disableComponent);
             }
         }
 
         public void Clear()
         {
-            this.awakeListeners.Clear();
-            this.enableListeners.Clear();
-            this.startListeners.Clear();
-            this.fixedUpdateListeners.Clear();
-            this.updateListeners.Clear();
-            this.lateUpdateListeners.Clear();
-            this.disableListeners.Clear();
+            this.awakeComponents.Clear();
+            this.enableComponents.Clear();
+            this.startComponents.Clear();
+            this.fixedUpdateComponents.Clear();
+            this.updateComponents.Clear();
+            this.lateUpdateComponents.Clear();
+            this.disableComponents.Clear();
         }
 
         protected virtual void Awake()
         {
-            for (int i = 0, count = this.awakeListeners.Count; i < count; i++)
+            for (int i = 0, count = this.awakeComponents.Count; i < count; i++)
             {
-                var listener = this.awakeListeners[i];
-                listener.OnAwaked();
+                var listener = this.awakeComponents[i];
+                listener.Awake();
             }
         }
 
         protected virtual void OnEnable()
         {
-            for (int i = 0, count = this.enableListeners.Count; i < count; i++)
+            for (int i = 0, count = this.enableComponents.Count; i < count; i++)
             {
-                var listener = this.enableListeners[i];
-                listener.OnEnabled();
+                var listener = this.enableComponents[i];
+                listener.OnEnable();
             }
         }
 
         protected virtual void Start()
         {
-            for (int i = 0, count = this.startListeners.Count; i < count; i++)
+            for (int i = 0, count = this.startComponents.Count; i < count; i++)
             {
-                var listener = this.startListeners[i];
-                listener.OnStarted();
+                var listener = this.startComponents[i];
+                listener.Start();
             }
         }
 
         protected virtual void FixedUpdate()
         {
             var deltaTime = Time.fixedDeltaTime;
-            for (int i = 0, count = this.fixedUpdateListeners.Count; i < count; i++)
+            for (int i = 0, count = this.fixedUpdateComponents.Count; i < count; i++)
             {
-                var listener = this.fixedUpdateListeners[i];
-                listener.OnFixedUpdated(deltaTime);
+                var listener = this.fixedUpdateComponents[i];
+                listener.FixedUpdate(deltaTime);
             }
         }
 
@@ -177,48 +177,47 @@ namespace MonoOptimization
         protected virtual void Update()
         {
             var deltaTime = Time.deltaTime;
-            for (int i = 0, count = this.updateListeners.Count; i < count; i++)
+            for (int i = 0, count = this.updateComponents.Count; i < count; i++)
             {
-                var listener = this.updateListeners[i];
-                listener.OnUpdated(deltaTime);
+                var listener = this.updateComponents[i];
+                listener.Update(deltaTime);
             }
         }
 
         protected virtual void LateUpdate()
         {
             var deltaTime = Time.deltaTime;
-            for (int i = 0, count = this.lateUpdateListeners.Count; i < count; i++)
+            for (int i = 0, count = this.lateUpdateComponents.Count; i < count; i++)
             {
-                var listener = this.lateUpdateListeners[i];
-                listener.OnLateUpdated(deltaTime);
+                var listener = this.lateUpdateComponents[i];
+                listener.LateUpdate(deltaTime);
             }
         }
 
         protected virtual void OnDisable()
         {
-            for (int i = 0, count = this.disableListeners.Count; i < count; i++)
+            for (int i = 0, count = this.disableComponents.Count; i < count; i++)
             {
-                var listener = this.disableListeners[i];
-                listener.OnDisabled();
+                var listener = this.disableComponents[i];
+                listener.OnDisable();
             }
         }
 
         private void OnDestroy()
         {
-            for (int i = 0, count = this.destroyListeners.Count; i < count; i++)
+            for (int i = 0, count = this.destroyComponents.Count; i < count; i++)
             {
-                var listener = this.destroyListeners[i];
-                listener.OnDestroyed();
+                var listener = this.destroyComponents[i];
+                listener.OnDestroy();
             }
         }
 
-        [ContextMenu("Validate")]
-        private void Validate()
+        private void OnValidate()
         {
-            for (int i = 0, count = this.validateListeners.Count; i < count; i++)
+            for (int i = 0, count = this.validateComponents.Count; i < count; i++)
             {
-                var listener = this.validateListeners[i];
-                listener.OnValidated();
+                var listener = this.validateComponents[i];
+                listener.OnValidate();
             }
         }
     }
