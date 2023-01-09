@@ -79,15 +79,15 @@ namespace MonoOptimization
             }
         }
 
-        public void UnregisterMonoComponents(IEnumerable<IMonoComponent> components)
+        public void RemoveMonoComponents(IEnumerable<IMonoComponent> components)
         {
             foreach (var component in components)
             {
-                this.UnregisterMonoComponent(component);
+                this.RemoveMonoComponent(component);
             }
         }
 
-        public void UnregisterMonoComponent(IMonoComponent component)
+        public void RemoveMonoComponent(IMonoComponent component)
         {
             if (component is IAwakeComponent awakeComponent)
             {
